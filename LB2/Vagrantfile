@@ -1,1 +1,20 @@
 # Vagrant file LB2 by András Horber
+# Version 1.0
+
+Vagrant.configure(2) do |config|
+    # Configuring VM: Proxy
+    config.vm.define "Proxy" do |proxy|
+        proxy.vm.box = "ubuntu/xenial64"
+        proxy.vm.provider "virtualbox" do |vb|
+          vb.memory = "384"  
+        end
+        proxy.vm.hostname = "Proxy"
+        proxy.vm.network "private_network", ip: "192.168.55.100"
+        proxy.vm.network "forwarded_port", guest:80, host:8080, auto_correct: false
+        proxy.vm.synced_folder ".", "/vagrant" 
+        proxy.vm.provision "shell", inline: <<-SHELL
+            sudo apt-get update
+            sudo apt-get upgrade -y
+            SHELL
+      end
+    end
