@@ -2,19 +2,41 @@
 # Version 1.0
 
 Vagrant.configure(2) do |config|
-    # Configuring VM: Proxy
-    config.vm.define "Proxy" do |proxy|
-        proxy.vm.box = "ubuntu/xenial64"
-        proxy.vm.provider "virtualbox" do |vb|
-          vb.memory = "384"  
-        end
-        proxy.vm.hostname = "Proxy"
-        proxy.vm.network "private_network", ip: "192.168.55.100"
-        proxy.vm.network "forwarded_port", guest:80, host:8080, auto_correct: false
-        proxy.vm.synced_folder ".", "/vagrant" 
-        proxy.vm.provision "shell", inline: <<-SHELL
-            sudo apt-get update
-            sudo apt-get upgrade -y
-            SHELL
-      end
+  # Configuring VM: Proxy
+  config.vm.define "Proxy" do |proxy|
+    proxy.vm.box = "ubuntu/bionic64"
+    proxy.vm.provider "virtualbox" do |vb|
+      vb.memory = "341"  
     end
+    proxy.vm.hostname = "M300-Proxy"
+    proxy.vm.network "private_network", ip: "192.168.255.10"
+    proxy.vm.network "public_network", bridge: "Intel(R) Ethernet Connection (2) I218-V", ip: "192.168.0.52"
+    proxy.vm.synced_folder ".", "/vagrant" 
+    proxy.vm.provision "shell", path: "default.sh"
+    proxy.vm.provision "shell", path: "proxy.sh"
+  end
+  # Configuring VM: DB01
+  config.vm.define "DB01" do |db01|
+    db01.vm.box = "ubuntu/bionic64"
+    db01.vm.provider "virtualbox" do |vb|
+      vb.memory = "512"  
+    end
+    db01.vm.hostname = "M300-DB01"
+    db01.vm.network "private_network", ip: "192.168.255.20"
+    db01.vm.synced_folder ".", "/vagrant" 
+    db01.vm.provision "shell", path: "default.sh"
+    db01.vm.provision "shell", path: "db.sh"
+  end
+  # Configuring VM: WEB01
+  config.vm.define "Web01" do |web01|
+    web01.vm.box = "ubuntu/bionic64"
+    web01.vm.provider "virtualbox" do |vb|
+      vb.memory = "341"  
+    end
+    web01.vm.hostname = "M300-WEB01"
+    web01.vm.network "private_network", ip: "192.168.255.30"
+    web01.vm.synced_folder ".", "/vagrant" 
+    web01.vm.provision "shell", path: "default.sh"
+    web01.vm.provision "shell", path: "web.sh"
+  end
+end
