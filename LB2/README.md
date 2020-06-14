@@ -46,18 +46,18 @@
    8. Konfiguration der UFW Firewall Schritt 2
 
 ### Testing
-| Nr. | Titel | Soll-Situation | Ist-Situation | Nachbearbeitung |
-| :---|:--- | :--- | :---| :---|
-| 1 | All_Setup | Die VMs werden alle mit den richtigen HW-Angaben aufgesetzt | PDie VMs werden alle mit den richtigen HW-Angaben aufgesetzt | nein |
-| 2 | All_Provision | Die VMs laufen alle das [default.sh](LB2\Scripts\default.sh) script durch | Die VMs laufen alle das default.sh script durch | nein |
-| 3 | Proxy_Provision | Die Proxy-VMs laufen alle das [proxy.sh](LB2\Scripts\proxy.sh) script durch | Die VMs laufen alle das default.sh script durch | nein |
-| 4 | DB_Provision | Die DB-VMs laufen alle das [db.sh](LB2\Scripts\db.sh) script durch | Die VMs laufen alle das default.sh script durch | nein |
-| 5 | WEB_Provision | Die Web-VMs laufen alle das [web.sh](LB2\Scripts\web.sh) script durch | Die VMs laufen alle das default.sh script durch | nein |
-| 6 | SSH_Access | SSH Zugriff ist nur vom Hostsystem möglich | SSH Zugriff ist nur vom Hostsystem möglich | nein |
-| 7 | DB_Access | Die Webserver haben zugriff auf die Datenbank mit der DB "wordpress" | Die Webserver haben zugriff auf die Datenbank mit der DB "wordpress" | nein |
-| 8 | Web_Access | Die Webseite ist über die IP des Proxy-Servers und Port 80 aufrufbar | Die Webseite ist über die IP des Proxy-Servers und Port 80 aufrufbar | nein |
-| 9 | Web_WP_Admin | Die Admin-Oberfläche von Wordpress ist erreichbar | Die Admin-Oberfläche von Wordpress ist erreichbar | nein | 
-| 10 | Run_Everywhere | Das Vagrantfile kann überall gestartet werden | Das Vagrantfile kann nicht überall ausgeführt werden. Grund sind statische IP-Adressierungen sowohl im VM internen Netz als auch Proxy WAN adresse | umstellung auf DHCP oder externes IP-Management-File |
+| Nr.  | Titel           | Soll-Situation                                                              | Ist-Situation                                                                                                                                      | Nachbearbeitung                                      |
+| :--- | :-------------- | :-------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------- |
+| 1    | All_Setup       | Die VMs werden alle mit den richtigen HW-Angaben aufgesetzt                 | PDie VMs werden alle mit den richtigen HW-Angaben aufgesetzt                                                                                       | nein                                                 |
+| 2    | All_Provision   | Die VMs laufen alle das [default.sh](LB2\Scripts\default.sh) script durch   | Die VMs laufen alle das default.sh script durch                                                                                                    | nein                                                 |
+| 3    | Proxy_Provision | Die Proxy-VMs laufen alle das [proxy.sh](LB2\Scripts\proxy.sh) script durch | Die VMs laufen alle das default.sh script durch                                                                                                    | nein                                                 |
+| 4    | DB_Provision    | Die DB-VMs laufen alle das [db.sh](LB2\Scripts\db.sh) script durch          | Die VMs laufen alle das default.sh script durch                                                                                                    | nein                                                 |
+| 5    | WEB_Provision   | Die Web-VMs laufen alle das [web.sh](LB2\Scripts\web.sh) script durch       | Die VMs laufen alle das default.sh script durch                                                                                                    | nein                                                 |
+| 6    | SSH_Access      | SSH Zugriff ist nur vom Hostsystem möglich                                  | SSH Zugriff ist nur vom Hostsystem möglich                                                                                                         | nein                                                 |
+| 7    | DB_Access       | Die Webserver haben zugriff auf die Datenbank mit der DB "wordpress"        | Die Webserver haben zugriff auf die Datenbank mit der DB "wordpress"                                                                               | nein                                                 |
+| 8    | Web_Access      | Die Webseite ist über die IP des Proxy-Servers und Port 80 aufrufbar        | Die Webseite ist über die IP des Proxy-Servers und Port 80 aufrufbar                                                                               | nein                                                 |
+| 9    | Web_WP_Admin    | Die Admin-Oberfläche von Wordpress ist erreichbar                           | Die Admin-Oberfläche von Wordpress ist erreichbar                                                                                                  | nein                                                 |
+| 10   | Run_Everywhere  | Das Vagrantfile kann überall gestartet werden                               | Das Vagrantfile kann nicht überall ausgeführt werden. Grund sind statische IP-Adressierungen sowohl im VM internen Netz als auch Proxy WAN adresse | umstellung auf DHCP oder externes IP-Management-File |
 
 ---
 ## Nachweise
@@ -72,9 +72,9 @@ Anfangs hatte ich Mühe ins Thema zu kommen. Mir war nicht klar, für was Vagran
 
 ### 1. K1 Umbebung auf eigenem Notebook eingerichtet und funktionsfähig
 #### 1.1 VirtualBox
-![IMG_Virtualbox](/images\K1_Virtualbox.jpg)
+![IMG_Virtualbox](/images/K1_Virtualbox.jpg)
 #### 1.2 Vagrant
-![IMG_Vagrant](/images\K1_Vagrant.jpg)
+![IMG_Vagrant](/images/K1_Vagrant.jpg)
 #### 1.3 Visualstudio-Code
 ![IMG_VSCode](/images\K1_VSCode.jpg)
 #### 1.4 Git-Client
@@ -124,14 +124,14 @@ Zum Testen und verstehen der Vagrant-Funktionen wurden die VMs des [Modul-Reposi
 
 ### 4. K4 Sicherheitsaspekte sind implementiert
 #### 4.1 Firewall eingerichtet inkl. Rules
-| Sourc\Destination | Hostsystem | WAN | Proxy | DB01 | Web01 | Web02 |
-| :---|:--- | :--- | :---| :---| :---| :---|
-| Hostsystem | x | any | 22/TCP, 80/TCP | 22/TCP | 22/TCP | 22/TCP |
-| WAN | - | x | 80/TCP | - | - | - |
-| Proxy | - | any | x | - | 80/TCP | 80/TCP |
-| DB01 | - | any | - | x | - | - |
-| Web01 | - | any | - | 3306/TCP | x | - |
-| Web02 | - | any | - | 3306/TCP | - | x |
+| Sourc\Destination | Hostsystem | WAN  | Proxy          | DB01     | Web01  | Web02  |
+| :---------------- | :--------- | :--- | :------------- | :------- | :----- | :----- |
+| Hostsystem        | x          | any  | 22/TCP, 80/TCP | 22/TCP   | 22/TCP | 22/TCP |
+| WAN               | -          | x    | 80/TCP         | -        | -      | -      |
+| Proxy             | -          | any  | x              | -        | 80/TCP | 80/TCP |
+| DB01              | -          | any  | -              | x        | -      | -      |
+| Web01             | -          | any  | -              | 3306/TCP | x      | -      |
+| Web02             | -          | any  | -              | 3306/TCP | -      | x      |
 #### 4.2 Reverse-Proxy eingerichtet
 Ja, Siehe [Proxy.sh](Scripts/proxy.sh)
 #### 4.3 Benutzer- und Rechtevergabe ist eingerichtet
