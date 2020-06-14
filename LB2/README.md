@@ -114,6 +114,7 @@ Verwendet wurde nur 4x ubuntu/bionic64, was Ubuntu 18.04 LTS entspricht.
 - Weitere Commands sind auf der Webseite von Vagrant zu finden: [Commands](https://www.vagrantup.com/docs/cli)
 #### 3.3 Eingerichtete Umgebung ist dokumentiert
 [Dokumentation](#dokumentation-lb2)
+![Networkplan](/images/K3_Networkplan.jpg)
 #### 3.4 Funktionsweise getestet inkl. Dokumentation der Testfälle
 [Testing](#testing)
 #### 3.5 andere, vorgefertigte vm auf eigenem Notebook aufgesetzt
@@ -135,10 +136,11 @@ Zum Testen und verstehen der Vagrant-Funktionen wurden die VMs des [Modul-Reposi
 #### 4.2 Reverse-Proxy eingerichtet
 Ja, Siehe [Proxy.sh](Scripts/proxy.sh)
 #### 4.3 Benutzer- und Rechtevergabe ist eingerichtet
-Benutzer und Rechtevergabe ist nur auf der Mysql Datenbank eingerichtet.
-Da der SSH zugriff nur vom Hostsystem und dem User Vagrant möglich ist, sollte dies ausreichend geschützt sein.
 Die Mysql Datenbank hat einen extra Benutzer `wpuser`, der nur auf die wordpress Datenbank zugreifen kann.
-Dieser User kann nur von den Webservern aus mit einem Passwort verwendet werden
+Dieser User kann nur von den Webservern aus mit einem Passwort verwendet werden.
+Zudem wurde auf den Webservern der Zugriff auf die Website-Dateien beschränkt.
+Dateien hochladen kann nur der Owner des Ordners, sprich Vagrant und die Gruppe Root. Der Rest hat nur Leserechte.
+Die Webseite an sich soll öffentlich zugänglich sein, daher gibt es hier kein Benutzerkonzept.
 #### 4.4 Zugang mit SSH-Tunnel abgesichert
 Nein, da SSH nur vom Hostsystem auf die VMs erlaubt ist.
 Firewall Rules werden im [Default.sh](Scripts/default.sh) so festgelegt.
@@ -162,8 +164,9 @@ Trotz relativ wenig Scriptzeilen wird wärend der Installation viel gemacht. Die
 ##### 5.2.1 Cloud-Integration
 Es wurde kein IaaS Verwendet
 ##### 5.2.2 Authentifizierung und Autorisierung via LDAP
--
+Es wurde kein LDAP eingerichtet
 ##### 5.2.3 Übungsdokumentation als Vorlage für Modul-Unterlagen erstellt
+Es wurde keine Übungsdokumentation erstellt
 #### 5.3 Persönliche Lernentwicklung
 ##### 5.3.1 Vergleich Vorwissen - Wissenszuwachs
 [Vorwissensstand](#1-vorwissensstand)
