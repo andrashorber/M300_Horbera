@@ -24,7 +24,6 @@ grant all privileges on wordpress.* to "wpuser";
 grant all privileges on wordpress.* to "wpuser"@"192.168.255.30";
 flush privileges;
 %EOF%
-#sudo mysql -uroot -pS0m3-R4nd0m-P4ssw0rd! wordpress < /vagrant/sqldump.sql
 
 # Configuration of UFW Firewall
 sudo ufw allow 3306/tcp

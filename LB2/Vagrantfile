@@ -12,8 +12,8 @@ Vagrant.configure(2) do |config|
     proxy.vm.network "private_network", ip: "192.168.255.10"
     proxy.vm.network "public_network", bridge: "Intel(R) Ethernet Connection (2) I218-V", ip: "192.168.0.52"
     proxy.vm.synced_folder ".", "/vagrant" 
-    proxy.vm.provision "shell", path: "default.sh"
-    proxy.vm.provision "shell", path: "proxy.sh"
+    proxy.vm.provision "shell", path: "Scripts/default.sh"
+    proxy.vm.provision "shell", path: "Scripts/proxy.sh"
   end
   # Configuring VM: DB01
   config.vm.define "DB01" do |db01|
@@ -24,8 +24,8 @@ Vagrant.configure(2) do |config|
     db01.vm.hostname = "M300-DB01"
     db01.vm.network "private_network", ip: "192.168.255.20"
     db01.vm.synced_folder ".", "/vagrant" 
-    db01.vm.provision "shell", path: "default.sh"
-    db01.vm.provision "shell", path: "db.sh"
+    db01.vm.provision "shell", path: "Scripts/default.sh"
+    db01.vm.provision "shell", path: "Scripts/db.sh"
   end
   # Configuring VM: WEB01
   config.vm.define "Web01" do |web01|
@@ -36,7 +36,19 @@ Vagrant.configure(2) do |config|
     web01.vm.hostname = "M300-WEB01"
     web01.vm.network "private_network", ip: "192.168.255.30"
     web01.vm.synced_folder ".", "/vagrant" 
-    web01.vm.provision "shell", path: "default.sh"
-    web01.vm.provision "shell", path: "web.sh"
+    web01.vm.provision "shell", path: "Scripts/default.sh"
+    web01.vm.provision "shell", path: "Scripts/web.sh"
+  end
+  # Configuring VM: WEB02
+  config.vm.define "Web02" do |web02|
+    web02.vm.box = "ubuntu/bionic64"
+    web02.vm.provider "virtualbox" do |vb|
+      vb.memory = "341"  
+    end
+    web02.vm.hostname = "M300-WEB02"
+    web02.vm.network "private_network", ip: "192.168.255.31"
+    web02.vm.synced_folder ".", "/vagrant" 
+    web02.vm.provision "shell", path: "Scripts/default.sh"
+    web02.vm.provision "shell", path: "Scripts/web.sh"
   end
 end
