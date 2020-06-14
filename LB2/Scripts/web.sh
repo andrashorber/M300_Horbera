@@ -21,6 +21,10 @@ sudo -u vagrant -i wp core install --url="192.168.0.52" --title="M300_LB2" --adm
 sudo sed -i s!/var/www/html!/var/www/html/M300! /etc/apache2/sites-available/000-default.conf
 sudo service apache2 restart
 
+# Configuration of Wordpress Site
+sudo -u vagrant -i wp plugin update --path=/var/www/html/M300 --all
+sudo -u vagrant -i wp theme update --path=/var/www/html/M300 --all
+
 # Configuration of UFW Firewall
 sudo ufw allow 80/tcp
 sudo ufw reload

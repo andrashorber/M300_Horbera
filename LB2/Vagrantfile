@@ -15,17 +15,17 @@ Vagrant.configure(2) do |config|
     proxy.vm.provision "shell", path: "Scripts/default.sh"
     proxy.vm.provision "shell", path: "Scripts/proxy.sh"
   end
-  # Configuring VM: DB01
-  config.vm.define "DB01" do |db01|
-    db01.vm.box = "ubuntu/bionic64"
-    db01.vm.provider "virtualbox" do |vb|
+  # Configuring VM: DB
+  config.vm.define "DB" do |db|
+    db.vm.box = "ubuntu/bionic64"
+    db.vm.provider "virtualbox" do |vb|
       vb.memory = "512"  
     end
-    db01.vm.hostname = "M300-DB01"
-    db01.vm.network "private_network", ip: "192.168.255.20"
-    db01.vm.synced_folder ".", "/vagrant" 
-    db01.vm.provision "shell", path: "Scripts/default.sh"
-    db01.vm.provision "shell", path: "Scripts/db.sh"
+    db.vm.hostname = "M300-DB"
+    db.vm.network "private_network", ip: "192.168.255.20"
+    db.vm.synced_folder ".", "/vagrant" 
+    db.vm.provision "shell", path: "Scripts/default.sh"
+    db.vm.provision "shell", path: "Scripts/db.sh"
   end
   # Configuring VM: WEB01
   config.vm.define "Web01" do |web01|
