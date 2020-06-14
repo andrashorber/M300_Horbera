@@ -49,10 +49,10 @@
 | Nr.  | Titel           | Soll-Situation                                                              | Ist-Situation                                                                                                                                      | Nachbearbeitung                                      |
 | :--- | :-------------- | :-------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------- |
 | 1    | All_Setup       | Die VMs werden alle mit den richtigen HW-Angaben aufgesetzt                 | PDie VMs werden alle mit den richtigen HW-Angaben aufgesetzt                                                                                       | nein                                                 |
-| 2    | All_Provision   | Die VMs laufen alle das [default.sh](LB2\Scripts\default.sh) script durch   | Die VMs laufen alle das default.sh script durch                                                                                                    | nein                                                 |
-| 3    | Proxy_Provision | Die Proxy-VMs laufen alle das [proxy.sh](LB2\Scripts\proxy.sh) script durch | Die VMs laufen alle das default.sh script durch                                                                                                    | nein                                                 |
-| 4    | DB_Provision    | Die DB-VMs laufen alle das [db.sh](LB2\Scripts\db.sh) script durch          | Die VMs laufen alle das default.sh script durch                                                                                                    | nein                                                 |
-| 5    | WEB_Provision   | Die Web-VMs laufen alle das [web.sh](LB2\Scripts\web.sh) script durch       | Die VMs laufen alle das default.sh script durch                                                                                                    | nein                                                 |
+| 2    | All_Provision   | Die VMs laufen alle das [default.sh](LB2/Scripts/default.sh) script durch   | Die VMs laufen alle das default.sh script durch                                                                                                    | nein                                                 |
+| 3    | Proxy_Provision | Die Proxy-VMs laufen alle das [proxy.sh](LB2/Scripts/proxy.sh) script durch | Die VMs laufen alle das default.sh script durch                                                                                                    | nein                                                 |
+| 4    | DB_Provision    | Die DB-VMs laufen alle das [db.sh](LB2/Scripts/db.sh) script durch          | Die VMs laufen alle das default.sh script durch                                                                                                    | nein                                                 |
+| 5    | WEB_Provision   | Die Web-VMs laufen alle das [web.sh](LB2/Scripts/web.sh) script durch       | Die VMs laufen alle das default.sh script durch                                                                                                    | nein                                                 |
 | 6    | SSH_Access      | SSH Zugriff ist nur vom Hostsystem möglich                                  | SSH Zugriff ist nur vom Hostsystem möglich                                                                                                         | nein                                                 |
 | 7    | DB_Access       | Die Webserver haben zugriff auf die Datenbank mit der DB "wordpress"        | Die Webserver haben zugriff auf die Datenbank mit der DB "wordpress"                                                                               | nein                                                 |
 | 8    | Web_Access      | Die Webseite ist über die IP des Proxy-Servers und Port 80 aufrufbar        | Die Webseite ist über die IP des Proxy-Servers und Port 80 aufrufbar                                                                               | nein                                                 |
@@ -76,23 +76,23 @@ Anfangs hatte ich Mühe ins Thema zu kommen. Mir war nicht klar, für was Vagran
 #### 1.2 Vagrant
 ![IMG_Vagrant](/images/K1_Vagrant.jpg)
 #### 1.3 Visualstudio-Code
-![IMG_VSCode](/images\K1_VSCode.jpg)
+![IMG_VSCode](/images/K1_VSCode.jpg)
 #### 1.4 Git-Client
-![IMG_GitGui](/images\K1_GitGui.jpg)
+![IMG_GitGui](/images/K1_GitGui.jpg)
 #### 1.5 SSH-Key für Client erstellt
-![IMG_GitGui](/images\K1_SshKey.jpg)
+![IMG_GitGui](/images/K1_SshKey.jpg)
 
 ### 2. K2 Eigene Lernumgebung (PLE) ist eingerichtet
 #### 1.1 GitHub oder Gitlab-Account ist erstellt
-![IMG_GitHubAccount](/images\K2_GitHubAccount.jpg)
+![IMG_GitHubAccount](/images/K2_GitHubAccount.jpg)
 #### 2.2 Git-Client wurde verwendet
-![IMG_GitGui](/images\K2_GitGui.jpg)
+![IMG_GitGui](/images/K2_GitGui.jpg)
 #### 2.3 Dokumentation ist als Mark Down vorhanden
-![IMG_DocAsMarkdown](/images\K2_DokAsMarkdown.jpg)
+![IMG_DocAsMarkdown](/images/K2_DokAsMarkdown.jpg)
 #### 2.4 Mark down-Editor ausgewählt und eingerichtet
-![IMG_DocAsMarkdown](/images\K2_Markdown_Extension.jpg)
+![IMG_DocAsMarkdown](/images/K2_Markdown_Extension.jpg)
 #### 2.5 Mark down ist strukturiert
-![IMG_DocAsMarkdown](/images\K2_DokAsMarkdown.jpg)
+![IMG_DocAsMarkdown](/images/K2_DokAsMarkdown.jpg)
 #### 2.6 Persönlicher Wissenstand im Bezug auf die wichtigsten Themen sind dokumentiert
 [Vorwissensstand](#1-vorwissensstand)
 #### 2.7 Wichtige Lernschritte sind dokumentiert
@@ -119,7 +119,7 @@ Verwendet wurde nur 4x ubuntu/bionic64, was Ubuntu 18.04 LTS entspricht.
 #### 3.5 andere, vorgefertigte vm auf eigenem Notebook aufgesetzt
 Zum Testen und verstehen der Vagrant-Funktionen wurden die VMs des [Modul-Repositorys/fwrp](https://github.com/mc-b/M300/tree/master/vagrant/fwrp) verwendet
 #### 3.6 Projekt mit Git und Mark Down dokumentiert
-![IMG_DocAsMarkdown](/images\K3_DokAsMarkdown.jpg)
+![IMG_DocAsMarkdown](/images/K3_DokAsMarkdown.jpg)<br>
 [Doku in Git](#3-k3-vagrant)
 
 ### 4. K4 Sicherheitsaspekte sind implementiert
@@ -147,7 +147,7 @@ Firewall Rules werden im [Default.sh](Scripts/default.sh) so festgelegt.
 - UFW Standardmässig auf Deny gestellt
 - Strickter Firewall-Regelsatz, nur das nötigste
 #### 4.6 Projekt mit Git und Mark Down dokumentiert
-![IMG_DocAsMarkdown](/images\K4_DokAsMarkdown.jpg)
+![IMG_DocAsMarkdown](/images/K4_DokAsMarkdown.jpg)
 [Doku in Git](#4-k4-sicherheitsaspekte-sind-implementiert)
 
 ### 5. K5 Zusätzliche Bewertungspunkte
