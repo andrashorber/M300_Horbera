@@ -24,6 +24,7 @@ sudo service apache2 restart
 # Configuration of Wordpress Site
 sudo -u vagrant -i wp plugin update --path=/var/www/html/M300 --all
 sudo -u vagrant -i wp theme update --path=/var/www/html/M300 --all
+curl -N http://loripsum.net/api/5 > /dev/null | sudo -u vagrant -i wp post generate --post_content --count=5 --path=/var/www/html/M300
 
 # Configuration of UFW Firewall
 sudo ufw allow 80/tcp

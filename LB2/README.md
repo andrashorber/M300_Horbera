@@ -57,7 +57,7 @@
 | 7    | DB_Access       | Die Webserver haben zugriff auf die Datenbank mit der DB "wordpress"        | Die Webserver haben zugriff auf die Datenbank mit der DB "wordpress"                                                                               | nein                                                 |
 | 8    | Web_Access      | Die Webseite ist über die IP des Proxy-Servers und Port 80 aufrufbar        | Die Webseite ist über die IP des Proxy-Servers und Port 80 aufrufbar                                                                               | nein                                                 |
 | 9    | Web_WP_Admin    | Die Admin-Oberfläche von Wordpress ist erreichbar                           | Die Admin-Oberfläche von Wordpress ist erreichbar                                                                                                  | nein                                                 |
-| 10   | Run_Everywhere  | Das Vagrantfile kann überall gestartet werden                               | Das Vagrantfile kann nicht überall ausgeführt werden. Grund sind statische IP-Adressierungen sowohl im VM internen Netz als auch Proxy WAN adresse | umstellung auf DHCP oder externes IP-Management-File |
+| 10   | Run_Everywhere  | Das Vagrantfile kann überall gestartet werden                               | Das Vagrantfile kann nicht überall ausgeführt werden. Grund sind statische IP-Adressierungen sowohl im VM internen Netz als auch Proxy WAN adresse | Umstellung auf DHCP oder externes IP-Management-File |
 
 ---
 ## Nachweise
