@@ -4,7 +4,7 @@ Version 1.0
 András Horber
 TBZ Technishce Berufsschule Zürich
 
-## Dokumentation LB2
+## Dokumentation LB3
 ### Voraussetzungen
 * aktuelle Installation von [Virtualbox](https://www.virtualbox.org)
 * aktuelle Installation von [Vagrant](https://www.vagrantup.com/)
@@ -65,7 +65,7 @@ TBZ Technishce Berufsschule Zürich
 | 6    | SSH_Access      | SSH Zugriff ist nur vom Hostsystem möglich                                  | SSH Zugriff ist nur vom Hostsystem möglich                                                                                                         | nein                                                 |
 | 7    | DB_Access       | Die Webserver haben zugriff auf die Datenbank mit der DB "wordpress"        | Die Webserver haben zugriff auf die Datenbank mit der DB "wordpress"                                                                               | nein                                                 |
 | 8    | Web_Access      | Die Webseite ist über die IP des Proxy-Servers und Port 80 aufrufbar        | Die Webseite ist über die IP des Proxy-Servers und Port 80 aufrufbar                                                                               | nein                                                 |
-| 9    | Web_WP_Admin    | Die Admin-Oberfläche von Wordpress ist erreichbar                           | Die Admin-Oberfläche von Wordpress ist nur erreichbar, wenn nur eine VM läuft. Dieser Fehler entsteht durch die Tatsache, dass der Proxy im Round Robin modus läuft. Dadurch wird die Verbindung immer weiter gegeben, was leider nicht funktioniert.                                                                                                  | Proxy Settings auf Active-Passiv stellen                                                  |
+| 9    | Web_WP_Admin    | Die Admin-Oberfläche von Wordpress ist erreichbar                           | Die Admin-Oberfläche von Wordpress ist erreichbar                                                                                                  | nein                                                 |
 | 10   | Run_Everywhere  | Das Vagrantfile kann überall gestartet werden                               | Das Vagrantfile kann nicht überall ausgeführt werden. Grund sind statische IP-Adressierungen sowohl im VM internen Netz als auch Proxy WAN adresse | Umstellung auf DHCP oder externes IP-Management-File |
 
 ---
