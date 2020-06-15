@@ -36,14 +36,15 @@
    9. Erstellung und Konfiguration von Mysql Datenbank
    10. Konfiguration der UFW Firewall Schritt 2
 3.  Web VM
-   1. Installation von Ubuntu/bionic64
-   2. Installation von Updates
-   3. Installation der UFW Firewall
-   4. Konfiguration der UFW Firewall Schritt 1
-   5. Installation von apache2, php, mysql-client und php-mysql
-   6. Installation und Konfiguration von Wordpress
-   7. Konfiguration von Wordpress Seite
-   8. Konfiguration der UFW Firewall Schritt 2
+    1.  Installation von Ubuntu/bionic64
+    2.  Installation von Updates
+    3.  Installation der UFW Firewall
+    4.  Konfiguration der UFW Firewall Schritt 1
+    5.  Installation von apache2, php, mysql-client und php-mysql
+    6.  Installation und Konfiguration von WP-CLI
+    7.  Installation und Konfiguration von Wordpress
+    8.  Konfiguration von Wordpress Seite
+    9.  Konfiguration der UFW Firewall Schritt 2
 
 ### Testing
 | Nr.  | Titel           | Soll-Situation                                                              | Ist-Situation                                                                                                                                      | Nachbearbeitung                                      |
@@ -64,9 +65,11 @@
 ### 1. Vorwissensstand
 Ich kenne mich in Linux nur ein wenig aus, da wir im Betrieb mit Windows Arbeiten. Ich kenne lediglich das, was ich bisher in der Schule bereits behandelt habe oder was ich schon einmal recherchiert habe. Im Betrieb laufen ca. 90% aller Server virtuell, somit habe ich dort schon ein wenig Erfahrung. Jedoch arbeiten wir dort mit VMware, was einen kleinen Unterschied zu VirtualBox ausmacht. Vagrant habe ich in diesem Modul zum ersten Mal gehört. Generell bauen wir auf fertigen Images auf und konfigurieren danach alles von Hand. Markdown finde ich ein spannendes Tool, wenn Duzende gleiche Maschinen erstellt werden müssen. für einzelne Server, die vor allem GUI-Basiert sind, ist Vagrant nicht geeignet. Versionierung kenn ich nur durch Dokumentationen. Dort wird immer hingeschrieben, wer zuletzt was und wann geändert hat. Somit kenn ich das Prinzip gut. Ich habe zuvor leider weder mit Git noch mit Markdown gearbeitet. Ich finde es gut, dass es eine zentrale Ablage gibt für Scripts, Dokumentationen, Programme etc. und dass diese mittels Markdown immer gleich dokumentiert sind. Wenn man einmal drin ist klappt das gut. Ich achte immer auf Sicherheit, habe mich aber bei der Virtualisierung und vor allem mit Vagrant noch nicht so viel damit beschäftigt. Dazu kommt nochmals der Punkt, dass ich im Bereich Linux nicht viel erfahrung habe, vor Allem mit der Sicherheit. Dies wieder mit dem Grund, dass wir Windows verwenden und dort die Sicheheitsaspekte anders laufen.
 
-### 2. Lernschritte im Verlauf der LB & Reflexion
-Anfangs hatte ich Mühe ins Thema zu kommen. Mir war nicht klar, für was Vagrant gebraucht werden soll, da ich die verwendung mehrerer gleicher oder ähnlicher VMs nicht kannte. Zudem war mir sowohl VirtualBox, als auch Vagrant, VSCode, Git und Markdown neu. Ich musste die ersten 2 Wochen nur recherchieren, bis ich den Aufbau von allem Verstanden habe und gemerkt habe, wie was miteinander verknüpft ist und was welche Aufgabe übernimmt. Danach hatte ich schnell eine Idee, wie die LB2 aussehen soll. Natürlich, wie bei mir üblich, habe ich mein Ziel wieder komplett zu hoch angesetzt. Ursprünglich wollte ich zwei Firewalls basierend auf einer OPNSense VM aufbauen, dahinter ein Load-Balancer, 2 synchrone SQL Server im Active-Passive Modus und 2 Web Server im Load-Balancing modus mit dem Selben inhald, der auf den SQL-Servern abgelegt ist. Auf der Webservern soll Apache2 und Wordpress installiert sein. Das Ziel, dass die Daten der Webseite im Vagrant file schon mitgegeben werden, so dass bei einem `Vagrant up` und einer kurzen Wartezeit 2 redundante vollfunktionsfähige Webseiten erscheinen. So könnte die Webseite irgendwo weiterentwickelt oder aktualisiert werden, auf das Github geladen werden und alle Webserver würden beim nächsten Reboot die Daten neu übernehmen. Ich musste jedoch recht schnell mein Vorhaben minimieren, da ich mit dem Syntax und allen Commands viel zu überfordert war. Ich habe die Firewall weggelassen und die DB nur einmal hinterlegt. Zudem habe ich es aus zeitlichen Gründen nicht geschfft, die Webseiten mittels https zu verschlüsseln. Ich bin jedoch stolz, dass ich mit hilfe von wp-cli eine funktionierende Wordpress installation hingekriegt habe. wp-cli ist ein Tool, welches die Verwaltung von Wordpress über das GUI zulässt. So könnte beispielsweise Wordpress via SSH konfiguriert werden, eine Seite neu erstellt werden oder ein Blog geschrieben werden. Das finde ich ziemlich praktisch. Abschliessend kann ich sagen, dass ich trotz einer VM-reduktion diese LB als gelungen ansehe. Zwischenzeitlich habe ich sogar daran gezweifelt, Wordpress zum laufen zu bringen. Ich hoffe, dass die Bewertung durch mögliche fehlende Sicherheitsaspekte nicht leiden muss.
+### 2. Lernschritte im Verlauf der LB
+Anfangs hatte ich Mühe ins Thema zu kommen. Mir war nicht klar, für was Vagrant gebraucht werden soll, da ich die verwendung mehrerer gleicher oder ähnlicher VMs nicht kannte. Zudem war mir sowohl VirtualBox, als auch Vagrant, VSCode, Git und Markdown neu. Ich musste die ersten 2 Wochen nur recherchieren, bis ich den Aufbau von allem Verstanden habe und gemerkt habe, wie was miteinander verknüpft ist und was welche Aufgabe übernimmt. Danach hatte ich schnell eine Idee, wie die LB2 aussehen soll. Natürlich, wie bei mir üblich, habe ich mein Ziel wieder komplett zu hoch angesetzt. Ursprünglich wollte ich zwei Firewalls basierend auf einer OPNSense VM aufbauen, dahinter ein Load-Balancer, 2 synchrone SQL Server im Active-Passive Modus und 2 Web Server im Load-Balancing modus mit dem Selben Inhalt, der auf den SQL-Servern abgelegt ist. Auf der Webservern soll Apache2 und Wordpress installiert sein. Das Ziel, dass die Daten der Webseite im Vagrant file schon mitgegeben werden, so dass bei einem `Vagrant up` und einer kurzen Wartezeit 2 redundante vollfunktionsfähige Webseiten erscheinen. So könnte die Webseite irgendwo weiterentwickelt oder aktualisiert werden, auf das Github geladen werden und alle Webserver würden beim nächsten Reboot die Daten neu übernehmen. Ich musste jedoch recht schnell mein Vorhaben minimieren, da ich mit dem Syntax und allen Commands viel zu überfordert war. Ich habe die Firewall weggelassen und die DB nur einmal hinterlegt. Zudem habe ich es aus zeitlichen Gründen nicht geschfft, die Webseiten mittels https zu verschlüsseln. Ich bin jedoch stolz, dass ich mit hilfe von wp-cli eine funktionierende Wordpress installation hingekriegt habe. wp-cli ist ein Tool, welches die Verwaltung von Wordpress über das GUI zulässt. So könnte beispielsweise Wordpress via SSH konfiguriert werden, eine Seite neu erstellt werden oder ein Blog geschrieben werden. Das finde ich ziemlich praktisch. Abschliessend kann ich sagen, dass ich trotz einer VM-reduktion diese LB als gelungen ansehe. Zwischenzeitlich habe ich sogar daran gezweifelt, Wordpress zum laufen zu bringen. Ich hoffe, dass die Bewertung durch mögliche fehlende Sicherheitsaspekte nicht leiden muss.
 
+### 3. Reflexion
+Das Erstellen der LB2 hat mir viele Probleme bereitet, dadurch dass ich mich zu schnell an mein eigenes Projekt gewendet habe, bevor ich den Syntax überhaupt verstanden habe. Nur durch viel Hilfe von anderen Quellen habe ich mich da wieder reingefunden. Ohne die Beispielvagrants vom Modul hätte ich das nicht so einfach hingekriegt. Ich bin froh, dass ich die LB2 doch noch so gut hinbekommen habe und hoffe natürlich auch auf eine gute Note. Ich finde Vagrant eine gute Lösung, jedoch bin ich froh, wenn ich Vagrant nicht mehr brauchen muss, denn mir erschliesst sich der Sinn hinter dem nicht ganz. Vagrant kann gut verwendet werden, wenn ein Hostsystem vorhanden ist und darauf Virtualisiert wird. Jedoch wird heutzutage mit dem Virtualisierungstyp 1, auch als Bare Metall Virtualisierung gearbeitet, damit die Umgebung nicht mehr Hostbetriebssystemabhängeg ist. Zudem macht das für mich nur Sinn, wenn mehrere VMs dieselbe Funktion ausüben sollen, damit nicht auf allen VMs manuell etwas gemacht werden muss.
 ---
 ## Nachweise Bewertungskriterien
 
@@ -96,7 +99,7 @@ Anfangs hatte ich Mühe ins Thema zu kommen. Mir war nicht klar, für was Vagran
 #### 2.6 Persönlicher Wissenstand im Bezug auf die wichtigsten Themen sind dokumentiert
 [Vorwissensstand](#1-vorwissensstand)
 #### 2.7 Wichtige Lernschritte sind dokumentiert
-[Lernschritte](#2-lernschritte-im-verlauf-der-lb--reflexion)
+[Lernschritte](#2-lernschritte-im-verlauf-der-lb)
 
 ### 3. K3 Vagrant
 #### 3.1 Bestehende vm aus Vagrant-Cloud einrichten
@@ -113,7 +116,7 @@ Verwendet wurde nur 4x ubuntu/bionic64, was Ubuntu 18.04 LTS entspricht.
 - **Vagrant Destroy** zerstört die VMs und löscht deren Daten.
 - Weitere Commands sind auf der Webseite von Vagrant zu finden: [Commands](https://www.vagrantup.com/docs/cli)
 #### 3.3 Eingerichtete Umgebung ist dokumentiert
-[Dokumentation](#dokumentation-lb2)
+[Dokumentation](#dokumentation-lb2)<br>
 ![Networkplan](/images/K3_Networkplan.jpg)
 #### 3.4 Funktionsweise getestet inkl. Dokumentation der Testfälle
 [Testing](#testing)
@@ -135,6 +138,7 @@ Zum Testen und verstehen der Vagrant-Funktionen wurden die VMs des [Modul-Reposi
 | Web02             | -          | any  | -              | 3306/TCP | -      | x      |
 #### 4.2 Reverse-Proxy eingerichtet
 Ja, Siehe [Proxy.sh](Scripts/proxy.sh)
+Der Proxy ist so konfiguriert, dass die Anfragen mittels Round Robin verfahren zu den Webservern weitergeleitet werden.
 #### 4.3 Benutzer- und Rechtevergabe ist eingerichtet
 Die Mysql Datenbank hat einen extra Benutzer `wpuser`, der nur auf die wordpress Datenbank zugreifen kann.
 Dieser User kann nur von den Webservern aus mit einem Passwort verwendet werden.
@@ -147,9 +151,9 @@ Firewall Rules werden im [Default.sh](Scripts/default.sh) so festgelegt.
 #### 4.5 Sicherheitsmassnahmen sind dokumentiert
 - UFW Firewall auf allen Maschinen aktiviert
 - UFW Standardmässig auf Deny gestellt
-- Strickter Firewall-Regelsatz, nur das nötigste
+- Strikter Firewall-Regelsatz, nur das nötigste wird konfiguriert
 #### 4.6 Projekt mit Git und Mark Down dokumentiert
-![IMG_DocAsMarkdown](/images/K4_DokAsMarkdown.jpg)
+![IMG_DocAsMarkdown](/images/K4_DokAsMarkdown.jpg) <br>
 [Doku in Git](#4-k4-sicherheitsaspekte-sind-implementiert)
 
 ### 5. K5 Zusätzliche Bewertungspunkte
@@ -170,6 +174,6 @@ Es wurde keine Übungsdokumentation erstellt
 #### 5.3 Persönliche Lernentwicklung
 ##### 5.3.1 Vergleich Vorwissen - Wissenszuwachs
 [Vorwissensstand](#1-vorwissensstand)
-[Lernschritte](#2-lernschritte-im-verlauf-der-lb--reflexion)
+[Wissenszuwachs](#2-lernschritte-im-verlauf-der-lb)
 ##### 5.3.2 Reflexion
-[Lernschritte](#2-lernschritte-im-verlauf-der-lb--reflexion)
+[Reflexion](#3-reflexion)
