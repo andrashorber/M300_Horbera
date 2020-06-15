@@ -70,6 +70,7 @@ Anfangs hatte ich Mühe ins Thema zu kommen. Mir war nicht klar, für was Vagran
 
 ### 3. Reflexion
 Das Erstellen der LB2 hat mir viele Probleme bereitet, dadurch dass ich mich zu schnell an mein eigenes Projekt gewendet habe, bevor ich den Syntax überhaupt verstanden habe. Nur durch viel Hilfe von anderen Quellen habe ich mich da wieder reingefunden. Ohne die Beispielvagrants vom Modul hätte ich das nicht so einfach hingekriegt. Ich bin froh, dass ich die LB2 doch noch so gut hinbekommen habe und hoffe natürlich auch auf eine gute Note. Ich finde Vagrant eine gute Lösung, jedoch bin ich froh, wenn ich Vagrant nicht mehr brauchen muss, denn mir erschliesst sich der Sinn hinter dem nicht ganz. Vagrant kann gut verwendet werden, wenn ein Hostsystem vorhanden ist und darauf Virtualisiert wird. Jedoch wird heutzutage mit dem Virtualisierungstyp 1, auch als Bare Metall Virtualisierung gearbeitet, damit die Umgebung nicht mehr Hostbetriebssystemabhängeg ist. Zudem macht das für mich nur Sinn, wenn mehrere VMs dieselbe Funktion ausüben sollen, damit nicht auf allen VMs manuell etwas gemacht werden muss.
+
 ---
 ## Nachweise Bewertungskriterien
 
