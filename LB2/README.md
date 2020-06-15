@@ -20,7 +20,8 @@ TBZ Technishce Berufsschule Zürich
 * Führen Sie den Befehl _vagrant up_ aus, damit die VMs installiert und gestartet werden.
   * Sollten da Fehler in der Generierung von Netzwerkadaptern entstehen, erstellen Sie in Virtualbox ein Host-Only Netzwerk mit der IP 192.168.255.0/24. Führen Sie danach erneut ein _vagrant up_ aus.
   * Sollte die SSH Verbindung zu einer VM in einem Timeout enden, versuchen Sie erneut ein _vagrant up_. Dies kann durch die längere Bootzeit von Ubuntu 18.04 vorkommen. Sollte dies nicht erfolgreich sein kommentieren Sie im [default.sh](/LB2/Scripts/default.sh) die Stelle `sudo ufw allow from 10.0.0.0/8 to any port 22` aus. Dies kommt dadurch, dass der Host möglicherweise ein anderes NAT-Netzwerk verwendet.
-* Innert wenigen Minuten ist die Wordpress installation fertig
+* Innert wenigen Minuten ist die Wordpress installation fertig.
+  * Sollte die Installation schneller durchgeführt werden, so kann der Command `sudo apt-get upgrade -y` aus dem [default.sh](/LB2/Scripts/default.sh) auskommentiert werden. Dadurch werden keine Updates installiert, was möglicherweise zu Security issues auf Kernel-Basis und Packeten führen kann.
 
 ### Automatischer Vorgang
 1. Proxy VM
