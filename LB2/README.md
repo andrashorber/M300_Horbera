@@ -1,4 +1,8 @@
 # M300 - Plattformübergreifende Dienste in ein Netzwerk integrieren
+15.06.2020
+Version 1.0
+András Horber
+TBZ Technishce Berufsschule Zürich
 
 ## Dokumentation LB2
 ### Voraussetzungen
@@ -174,7 +178,8 @@ Es wurde kein IaaS Verwendet
 ##### 5.2.2 Authentifizierung und Autorisierung via LDAP
 Es wurde kein LDAP eingerichtet
 ##### 5.2.3 Übungsdokumentation als Vorlage für Modul-Unterlagen erstellt
-Es wurde keine Übungsdokumentation erstellt
+Die Installation und das Script wurde so geschrieben, dass jeder dies Nachbauen kann.
+Zudem sind noch einige Punkte für Troubleshooting integriert, wenn die Installation und das Aufstarten der VMs zu Problemen führt.
 #### 5.3 Persönliche Lernentwicklung
 ##### 5.3.1 Vergleich Vorwissen - Wissenszuwachs
 [Vorwissensstand](#1-vorwissensstand)
