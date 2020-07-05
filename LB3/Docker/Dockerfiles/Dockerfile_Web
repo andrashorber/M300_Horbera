@@ -1,0 +1,76 @@
+# Wordpress Webserver 
+# TBZ M300 LB3
+# András Horber
+# Version 1
+# 2020.06.28
+
+#Starting from Ubuntu 20.04
+FROM ubuntu:20.04
+
+#Define Enviroments and Arguments
+ARG INSTALLUSER=$INSTALLUSER
+ARG INSTALLDIR=$INSTALLDIR
+ARG MYSQL_HOST=$MYSQL_HOST
+ARG MYSQL_DATABASE=$MYSQL_DATABASE
+ARG MYSQL_USER=$MYSQL_USER
+ARG MYSQL_PASSWORD=$MYSQL_PASSWORD
+ARG MYSQL_DB_PREFIX=$MYSQL_DB_PREFIX
+ARG WP_ULR=$WP_ULR
+ARG WP_SITENAME=$WP_SITENAME
+ARG WP_ADMIN_USER=$WP_ADMIN_USER
+ARG WP_ADMIN_PASSWORD=$WP_ADMIN_PASSWORD
+ARG WP_ADMIN_EMAIL=$WP_ADMIN_EMAIL
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=$TZ
+
+#Running Updates
+RUN apt-get update 
+RUN apt-get upgrade -y 
+
+#Creating User
+RUN useradd $INSTALLUSER -m
+
+#Installing needed Tools and Programms
+RUN apt-get install -y apache2 php mysql-client php-mysql wget sed
+
+#Downloading wp-cli
+RUN wget -q https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+
+#Changeing Rights of wp-cli and moveing to Location
+RUN chown $INSTALLUSER wp-cli.phar
+RUN chmod 761 wp-cli.phar
+RUN mv wp-cli.phar /usr/local/bin/wp
+
+#removing Apache default Page
+RUN rm /var/www/html/index.html
+
+#Preparing Wordpress site location
+RUN mkdir $INSTALLDIR
+RUN mkdir $INSTALLDIR/wp-content
+RUN chown -R $INSTALLUSER $INSTALLDIR
+RUN chown -R $INSTALLUSER $INSTALLDIR/wp-content
+WORKDIR $INSTALLDIR
+USER $INSTALLUSER
+
+#Download Wordpress
+RUN wp core download
+
+#Configure Wordpress Database
+RUN wp config create --dbhost=$MYSQL_HOST --dbname=$MYSQL_DATABASE --dbuser=$MYSQL_USER --dbpass=$MYSQL_PASSWORD --dbprefix=$MYSQL_DB_PREFIX
+RUN chown -R $INSTALLUSER ./wp-config.php
+
+#Installing Wordpress Site
+RUN wp core install --url=$WP_ULR --title=$WP_SITENAME --admin_user=$WP_ADMIN_USER --admin_password=$WP_ADMIN_PASSWORD --admin_email=$WP_ADMIN_EMAIL
+
+#Configuring Default Wordpress site
+USER root
+RUN sed -i 's!/var/www/html!$INSTALLDIR!' /etc/apache2/sites-available/000-default.conf
+USER $INSTALLUSER
+
+#Updateing Wordpress Plugin and Theme
+RUN wp plugin update --all
+RUN wp theme update --all
+
+#Expose Port 80
+EXPOSE 80
+

@@ -1,0 +1,59 @@
+# Docker Compose File
+# TBZ M300 LB3
+# András Horber
+# Version 1
+# 2020.06.28
+
+version: '3.8'
+services:
+  db01:
+    image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password
+    container_name: "db01"
+    volumes:
+      - type: bind
+        source: /Docker/mysql
+        target: /var/lib/mysql
+    environment: 
+      MYSQL_ROOT_PASSWORD: S0m3-R4nd0m-P4ssw0rd!
+      MYSQL_DATABASE: m300_wordpress
+      MYSQL_USER: m300_wpuser
+      MYSQL_PASSWORD: m300_P4ssw0rd!
+    expose: 
+      - "3306"
+    ports: 
+      - 3306:3306
+
+
+  web01:
+    depends_on: 
+      - db01
+    build:
+      context: ./Dockerfiles
+      dockerfile: Dockerfile_Web
+      args: 
+        INSTALLUSER: Docker
+        INSTALLDIR: /var/www/html/M300
+        MYSQL_HOST: "192.168.123.20"
+        MYSQL_DATABASE: m300_wordpress
+        MYSQL_USER: m300_wpuser
+        MYSQL_PASSWORD: m300_P4ssw0rd!
+        MYSQL_DB_PREFIX: db_
+        WP_ULR: "192.168.0.200"
+        WP_SITENAME: M300
+        WP_ADMIN_USER: m300admin
+        WP_ADMIN_PASSWORD: P4ssw0rd!
+        WP_ADMIN_EMAIL: admin@no-mail.local
+    links: 
+      - db01:db01
+    container_name: "web01"
+    volumes:
+      - type: bind
+        source: /Docker/web
+        target: /var/www/html/
+    expose: 
+      - "80"
+    ports:
+      - 0.0.0.0:80:80
+    environment: 
+      TZ: Europe/Zurich

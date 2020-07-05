@@ -1,83 +1,67 @@
 # M300 - Plattformübergreifende Dienste in ein Netzwerk integrieren
-15.06.2020
+29.06.2020
 Version 1.0
 András Horber
 TBZ Technishce Berufsschule Zürich
 
 ## Dokumentation LB3
 ### Voraussetzungen
-* aktuelle Installation von [Virtualbox](https://www.virtualbox.org)
-* aktuelle Installation von [Vagrant](https://www.vagrantup.com/)
+* aktuelle Installation von einem Typ2-Hypervisor (Hier [VMware Workstation](hhttps://my.vmware.com/de/web/vmware/downloads/info/slug/desktop_end_user_computing/vmware_workstation_pro/15_0))
+* Eine Virtuelle Maschine mit Ubuntu (Hier [Ubuntu 20.04 Server](https://ubuntu.com/download/server/thank-you?version=20.04&architecture=amd64))
+* Eine Virtuelle Maschine mit [OPNsense](https://opnsense.org/), um die Netze zu trennen und miteinander zu verbinden
+  * NAT Portforwarding auf den Ubuntu Server ist eingerichtet auf Port 80
 * Internetanschluss
 * eine lokale Kopie vom [Repository](https://github.com/andrashorber/M300_Horbera.git)
-* [Git Bash](https://git-scm.com/downloads) oder ähnliches terminal, aus der Vagrant und das Vagrantfile gestartet werden können.
-* 2GB freien RAM und 30GB Speicherplatz
+* 
 
 ### Installation
-* Starten Sie Git Bash
-* Wechseln Sie mittels cd in die lokale Kopie des Repository und danach in den Ordner LB2
-* Überarbeiten Sie im Vagrantfile die Netzwerkanbindung des Proxy `proxy.vm.network "public_network", bridge:` und setzen Sie dort ihren Netzwerkadapter und eine IP ihres Heim-Netzwerkes ein.
-* Führen Sie den Befehl _vagrant up_ aus, damit die VMs installiert und gestartet werden.
-  * Sollten da Fehler in der Generierung von Netzwerkadaptern entstehen, erstellen Sie in Virtualbox ein Host-Only Netzwerk mit der IP 192.168.255.0/24. Führen Sie danach erneut ein _vagrant up_ aus.
-  * Sollte die SSH Verbindung zu einer VM in einem Timeout enden, versuchen Sie erneut ein _vagrant up_. Dies kann durch die längere Bootzeit von Ubuntu 18.04 vorkommen. Sollte dies nicht erfolgreich sein kommentieren Sie im [default.sh](/LB2/Scripts/default.sh) die Stelle `sudo ufw allow from 10.0.0.0/8 to any port 22` aus. Dies kommt dadurch, dass der Host möglicherweise ein anderes NAT-Netzwerk verwendet.
-* Innert wenigen Minuten ist die Wordpress installation fertig.
-  * Sollte die Installation schneller durchgeführt werden, so kann der Command `sudo apt-get upgrade -y` aus dem [default.sh](/LB2/Scripts/default.sh) auskommentiert werden. Dadurch werden keine Updates installiert, was möglicherweise zu Security issues auf Kernel-Basis und Packeten führen kann.
+* Starten der Ubuntu und OPNsense VM
+* Shared Folder mit dem Namen "Docker" und dem Pfad "GITHUBREPO\LB3\Docker" erstellen
+* Allenfalls auf Ubunntu den shared folder mounten: /mnt/Docker
+* Überarbeiten Sie im Docker-compose.yml die wichtigsten Angaben so, dass es auf ihrer Umgebung kunktioniert
+* Führen Sie in Ubuntu den Befehl _docker-compose up db01_ aus, damit die DB installiert und gestartet wird.
+* Führen Sie in Ubuntu den Befehl _docker-compose up web01_ aus, damit Wordpress installiert und gestartet wird.
 
-### Automatischer Vorgang
-1. Proxy VM
-   1. Installation von Ubuntu/bionic64
-   2. Installation von Updates
-   3. Installation der UFW Firewall
-   4. Konfiguration der UFW Firewall Schritt 1
-   5. Installation von HAProxy
-   6. Konfiguration von HAProxy
-   7. Konfiguration der UFW Firewall Schritt 2
-2. DB VM
-   1. Installation von Ubuntu/bionic64
-   2. Installation von Updates
-   3. Installation der UFW Firewall
-   4. Konfiguration der UFW Firewall Schritt 1
-   5. Installation von debconf-utils
-   6. Konfiguration von debconf-utils
-   7. Installation von Mysql-server
-   8. Konfiguration von Mysql Server
-   9. Erstellung und Konfiguration von Mysql Datenbank
-   10. Konfiguration der UFW Firewall Schritt 2
-3.  Web VM
-    1.  Installation von Ubuntu/bionic64
-    2.  Installation von Updates
-    3.  Installation der UFW Firewall
-    4.  Konfiguration der UFW Firewall Schritt 1
-    5.  Installation von apache2, php, mysql-client und php-mysql
-    6.  Installation und Konfiguration von WP-CLI
-    7.  Installation und Konfiguration von Wordpress
-    8.  Konfiguration von Wordpress Seite
-    9.  Konfiguration der UFW Firewall Schritt 2
+
+### Automatischer Vorgang ab docker-compose.yml
+
+1. Mysql DB
+   1. Installation von Mysql vom [mysql image](https://hub.docker.com/_/mysql)
+   2. Konfiguration von Root-Password, DB und User
+2. Wordpress
+   1. Installation von Ubuntu20.04 vom [Ubuntu image](https://hub.docker.com/_/ubuntu)
+   2. Definition von Argumenten und Variabeln
+   3. Installation von Updates
+   4. Erstellen eines Benutzers
+   5. Installation von den benötigten paketen
+   6. Installation und Konfiguration von WP-CLI
+   7. Installation und Konfiguration von Wordpress
+   8. Konfiguration von Wordpress Seite
 
 ### Testing
 | Nr.  | Titel           | Soll-Situation                                                              | Ist-Situation                                                                                                                                      | Nachbearbeitung                                      |
 | :--- | :-------------- | :-------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------- |
-| 1    | All_Setup       | Die VMs werden alle mit den richtigen HW-Angaben aufgesetzt                 | PDie VMs werden alle mit den richtigen HW-Angaben aufgesetzt                                                                                       | nein                                                 |
-| 2    | All_Provision   | Die VMs laufen alle das [default.sh](/LB2/Scripts/default.sh) script durch   | Die VMs laufen alle das default.sh script durch                                                                                                    | nein                                                 |
-| 3    | Proxy_Provision | Die Proxy-VMs laufen alle das [proxy.sh](/LB2/Scripts/proxy.sh) script durch | Die VMs laufen alle das default.sh script durch                                                                                                    | nein                                                 |
-| 4    | DB_Provision    | Die DB-VMs laufen alle das [db.sh](/LB2/Scripts/db.sh) script durch          | Die VMs laufen alle das default.sh script durch                                                                                                    | nein                                                 |
-| 5    | WEB_Provision   | Die Web-VMs laufen alle das [web.sh](/LB2/Scripts/web.sh) script durch       | Die VMs laufen alle das default.sh script durch                                                                                                    | nein                                                 |
-| 6    | SSH_Access      | SSH Zugriff ist nur vom Hostsystem möglich                                  | SSH Zugriff ist nur vom Hostsystem möglich                                                                                                         | nein                                                 |
-| 7    | DB_Access       | Die Webserver haben zugriff auf die Datenbank mit der DB "wordpress"        | Die Webserver haben zugriff auf die Datenbank mit der DB "wordpress"                                                                               | nein                                                 |
-| 8    | Web_Access      | Die Webseite ist über die IP des Proxy-Servers und Port 80 aufrufbar        | Die Webseite ist über die IP des Proxy-Servers und Port 80 aufrufbar                                                                               | nein                                                 |
-| 9    | Web_WP_Admin    | Die Admin-Oberfläche von Wordpress ist erreichbar                           | Die Admin-Oberfläche von Wordpress ist erreichbar                                                                                                  | nein                                                 |
-| 10   | Run_Everywhere  | Das Vagrantfile kann überall gestartet werden                               | Das Vagrantfile kann nicht überall ausgeführt werden. Grund sind statische IP-Adressierungen sowohl im VM internen Netz als auch Proxy WAN adresse | Umstellung auf DHCP oder externes IP-Management-File |
+| 1    | All_Setup       | Die Container werden alle mit den richtigen Angaben aufgesetzt                 | Die Container werden alle mit den richtigen Angaben aufgesetzt                                                                                       | nein                                                 |
+| 2    | Mysql_Port      | Der Msyql-Container exposed den Port 3306 und gibt den Port 3306 dem Host weiter   | Der Msyql-Container exposed den Port 3306 und gibt den Port 3306 dem Host weiter                                                                                                    | nein                                                 |
+| 3    | Mysql_Volume    | Die Mysql-Daten werdenunter /Docker/mysql gespeichert | Die Mysql-Daten werdenunter /Docker/mysql gespeichert                                                                                             | nein                                                 |
+| 4    | Mysql_User      | Der Mysql User, die DB und das Root-Passwort werden korrekt implementiert          | Der Mysql User, die DB und das Root-Passwort werden korrekt implementiert                                                                                           | nein                                                 |
+| 5    | WEB_Port        | Der Webserver-Container exposed den Port 80 und gibt den Port 80 dem Host weiter       | Der Webserver-Container exposed den Port 80, gibt aber den Port 80 dem Host noch nicht weiter                                                                                      | Besprechung mit Herr Rohr bezüglich fehlerfindung.                                                 |
+| 6    | Web_Volume      | Die Wordpress-Daten werden unter /Docker/web gespeichert                                  | Die Wordpress-Daten werden noch nicht unter /Docker/web gespeichert                                                                                             | Besprechung mit Herr Rohr bezüglich fehlerfindung.                                                  |
+| 7    | Web_User       | Es wird ein User erstellt, ddamit wordpress nicht mit root-Rechten laufen muss        | Es wird ein User erstellt, ddamit wordpress nicht mit root-Rechten laufen muss                                                                               | nein                                                 |
+| 8    | Web_Access      | Die Webseite ist über die IP des Routers und Port 80 aufrufbar        | Die Webseite ist über die IP des Routers und Port 80 aufrufbar                                                                               | nein                                                 |
+| 9    | SSH_Access    | Die Verbindung mittels SSH ist nur vom Host-Netzwerk möglich                           | Die Verbindung mittels SSH ist nur vom Host-Netzwerk möglich                                                                                                  | nein                                                 |
+| 10   | Run_Everywhere  | Das Docker-compose kann überall problemlos gestartet werden                               | Das Docker-compose kann nicht überall problemlos gestartet werden | Es sind viele Vorbereitungen und Umplanungen nötig, das Script muss teils der Umgebung angepasst werden. Jedoch wurde alles im Docker-compose.yml festgelegt, damit das dockerfile nicht angepasst werden muss. |
 
 ---
 ## Nachweise
 ### 1. Vorwissensstand
-Ich kenne mich in Linux nur ein wenig aus, da wir im Betrieb mit Windows Arbeiten. Ich kenne lediglich das, was ich bisher in der Schule bereits behandelt habe oder was ich schon einmal recherchiert habe. Im Betrieb laufen ca. 90% aller Server virtuell, somit habe ich dort schon ein wenig Erfahrung. Jedoch arbeiten wir dort mit VMware, was einen kleinen Unterschied zu VirtualBox ausmacht. Vagrant habe ich in diesem Modul zum ersten Mal gehört. Generell bauen wir auf fertigen Images auf und konfigurieren danach alles von Hand. Markdown finde ich ein spannendes Tool, wenn Duzende gleiche Maschinen erstellt werden müssen. für einzelne Server, die vor allem GUI-Basiert sind, ist Vagrant nicht geeignet. Versionierung kenn ich nur durch Dokumentationen. Dort wird immer hingeschrieben, wer zuletzt was und wann geändert hat. Somit kenn ich das Prinzip gut. Ich habe zuvor leider weder mit Git noch mit Markdown gearbeitet. Ich finde es gut, dass es eine zentrale Ablage gibt für Scripts, Dokumentationen, Programme etc. und dass diese mittels Markdown immer gleich dokumentiert sind. Wenn man einmal drin ist klappt das gut. Ich achte immer auf Sicherheit, habe mich aber bei der Virtualisierung und vor allem mit Vagrant noch nicht so viel damit beschäftigt. Dazu kommt nochmals der Punkt, dass ich im Bereich Linux nicht viel erfahrung habe, vor Allem mit der Sicherheit. Dies wieder mit dem Grund, dass wir Windows verwenden und dort die Sicheheitsaspekte anders laufen.
+Mit Docker oder allgemein Containern habe ich noch nie gearbeitet. Wir arbeiten im Betrieb leider immer noch nur mit Virtuellen Maschinen, da Windows nicht so gut als Container funktionieren und wir allgemein immer mit grafischer Oberfläche arbeiten, was ich persönlich schade finde. Ich kenne Docker nur vom Namen und weiss etwa, wie es funktioniert und was es macht. Allgemein habe ich nur selten mit Containert zu tun, obwohl ich weiss, dass das die Zukunft sein wird. Auch ich will in meiner Umgebung zu Hause Docker einrichten, sodass ich Beispielsweise meine Webserver darauf lassenlaufen könnte. Denn so wird die Last viel besser aufgeteilt und ich muss nicht so viele VMs erstellen. Klar kann man mit Virtual-IPs arbeiten und mehrere Webserver auf einem Host laufen lassen, dies führt jedoch auch manchmal zu fehlern. Ist die Seite gut aufgebaut kann sie auch problemlos und ohne Unterbruch geupdatet werden, indem einfach ein neuer Container hochgezogen wird und der andere danach gekillt wird.
 
 ### 2. Lernschritte im Verlauf der LB
-Anfangs hatte ich Mühe ins Thema zu kommen. Mir war nicht klar, für was Vagrant gebraucht werden soll, da ich die verwendung mehrerer gleicher oder ähnlicher VMs nicht kannte. Zudem war mir sowohl VirtualBox, als auch Vagrant, VSCode, Git und Markdown neu. Ich musste die ersten 2 Wochen nur recherchieren, bis ich den Aufbau von allem Verstanden habe und gemerkt habe, wie was miteinander verknüpft ist und was welche Aufgabe übernimmt. Danach hatte ich schnell eine Idee, wie die LB2 aussehen soll. Natürlich, wie bei mir üblich, habe ich mein Ziel wieder komplett zu hoch angesetzt. Ursprünglich wollte ich zwei Firewalls basierend auf einer OPNSense VM aufbauen, dahinter ein Load-Balancer, 2 synchrone SQL Server im Active-Passive Modus und 2 Web Server im Load-Balancing modus mit dem Selben Inhalt, der auf den SQL-Servern abgelegt ist. Auf der Webservern soll Apache2 und Wordpress installiert sein. Das Ziel, dass die Daten der Webseite im Vagrant file schon mitgegeben werden, so dass bei einem `Vagrant up` und einer kurzen Wartezeit 2 redundante vollfunktionsfähige Webseiten erscheinen. So könnte die Webseite irgendwo weiterentwickelt oder aktualisiert werden, auf das Github geladen werden und alle Webserver würden beim nächsten Reboot die Daten neu übernehmen. Ich musste jedoch recht schnell mein Vorhaben minimieren, da ich mit dem Syntax und allen Commands viel zu überfordert war. Ich habe die Firewall weggelassen und die DB nur einmal hinterlegt. Zudem habe ich es aus zeitlichen Gründen nicht geschfft, die Webseiten mittels https zu verschlüsseln. Ich bin jedoch stolz, dass ich mit hilfe von wp-cli eine funktionierende Wordpress installation hingekriegt habe. wp-cli ist ein Tool, welches die Verwaltung von Wordpress über das GUI zulässt. So könnte beispielsweise Wordpress via SSH konfiguriert werden, eine Seite neu erstellt werden oder ein Blog geschrieben werden. Das finde ich ziemlich praktisch. Abschliessend kann ich sagen, dass ich trotz einer VM-reduktion diese LB als gelungen ansehe. Zwischenzeitlich habe ich sogar daran gezweifelt, Wordpress zum laufen zu bringen. Ich hoffe, dass die Bewertung durch mögliche fehlende Sicherheitsaspekte nicht leiden muss.
+Anfangs hatte ich Mühe ins Thema zu kommen. Da ich Docker nur vom Namen gekannt habe und sonst noch nie was davon gehört habe, musste ich mich zuerst einlesen. Das ist aber in jedem Thema so, das ist klar. Danach habe ich mir wie üblich ein Ziel gesetzt, welches ich selber erreichen wollte. Ich wollte die Selbe Umgebung aufbauen wie bei der LB2, mit kleinen Änderungen: Ich wollte diesmal auf dem Proxy verzichten und stattdessen eine Router-VM einsetzen. Dies mit dem Gedanken, dass dies vielleicht dem heutigen Vorgehen ähneln könnte und das auch so mein Ziel wäre für meine eigene Umgebung zu Hause. Zudem kann auf einer OPNsense Router-VM auch HAProxy konfiguriert werden und die Netze sind besser untereinander geteilt. Zudem kann ich auch die Sicherheit damit erhöhen. Ich habe die Umgebung nun auf VMware umgestellt, da ich mich damit besser auskenne. So konnte ich die Netze komplett voneinander trennen und über die Firewall-VM den ssh-Zugriff besser steuern. Denn nun kommt man nur noch vom Host-Netzwerk per ssh in die Umgebung, nicht mehr von überall. Eine Weitere Änderung war, das ich von Anfang an nur auf eine Webserver-Container gesetzt habe und nicht auf 2. Die Daten lasse ich natürlich trotzdem raussschreiben, damit im Falle eines 2. Containers die Daten ausgetauscht werden können. Zudem war ein grosses Ziel von mir Kubernetes umzusetzen. Kubernetes ist eine Container-Verwaltungs-Lösung, die vor allem auf dem Master-Slave Prinzip arbeitet. Dass heisst der Master verteilt die Container, führt Commands aus und übernimmt das Netzwerk-Management. Die Slaves lassen nur die Container laufen und haben somit kaum was zu tun. Das macht vor allem Sinn, wenn mehrere slaves in verschiedenen Rechenzentren untergebracht sind, so ist ein Aufall für die aussenstehenden nicht zu bemerken.
 
 ### 3. Reflexion
-Das Erstellen der LB2 hat mir viele Probleme bereitet, dadurch dass ich mich zu schnell an mein eigenes Projekt gewendet habe, bevor ich den Syntax überhaupt verstanden habe. Nur durch viel Hilfe von anderen Quellen habe ich mich da wieder reingefunden. Ohne die Beispielvagrants vom Modul hätte ich das nicht so einfach hingekriegt. Ich bin froh, dass ich die LB2 doch noch so gut hinbekommen habe und hoffe natürlich auch auf eine gute Note. Ich finde Vagrant eine gute Lösung, jedoch bin ich froh, wenn ich Vagrant nicht mehr brauchen muss, denn mir erschliesst sich der Sinn hinter dem nicht ganz. Vagrant kann gut verwendet werden, wenn ein Hostsystem vorhanden ist und darauf Virtualisiert wird. Jedoch wird heutzutage mit dem Virtualisierungstyp 1, auch als Bare Metall Virtualisierung gearbeitet, damit die Umgebung nicht mehr Hostbetriebssystemabhängeg ist. Zudem macht das für mich nur Sinn, wenn mehrere VMs dieselbe Funktion ausüben sollen, damit nicht auf allen VMs manuell etwas gemacht werden muss.
+Ich habe mich bei LB3 viel zu Lange mit Kubernetes beschäftigt. 8 Lektionen und noch einige weiteren Stunden in der Freiziet habe ich vergeblich versucht, Kubernetes zum Laufen zu bringen. Ettliche Quellen bin ich durchgerattert, da keine wirklich funktioniert hatte. Schlussendlich habe ich es doch noch hingekriegt, die Umgebung läuft und ich konnte sogar Kubernetes-Dashboard installieren, damit das ganze auf einer Grafischen Oberfläche überwacht werden kann und die Container dort erstellt werden könnten. Jetzt musste ich nur noch mein eigendliches Projekt umsetzen. Ich hate sehr viel Mühe mit dem Netzwerk-Management und den Volumes, das hat bei mir ich der Aufbau-Umgebung nicht so funktioniert. Den Fehler mit dem Volumes konnte ich beheben, inden ich einen anderen Pfad genommen hatte. Anscheinend kann Docker nicht mit VMwar Shared Folders arbeiten, zuminderst nicht reinschreiben. Das Netzwerkproblem war, dass mein Web-Container den DB-Container nicht erreichen konnte. Ich bin nicht ganz zu frieden mit dem Ergebniss, hätte gerne noch mehr umgesetzt. Ich habe mein Vorhaben wieder komplett überschätzt. Ich hoffe jedoch trotzdem auf eine gute Note und dass ich vielleicht mit Kubernete einige Zusatzpunkte herausholen kann.
 
 ---
 ## Nachweise Bewertungskriterien
@@ -110,75 +94,80 @@ Das Erstellen der LB2 hat mir viele Probleme bereitet, dadurch dass ich mich zu 
 #### 2.7 Wichtige Lernschritte sind dokumentiert
 [Lernschritte](#2-lernschritte-im-verlauf-der-lb)
 
-### 3. K3 Vagrant
-#### 3.1 Bestehende vm aus Vagrant-Cloud einrichten
-Verwendet wurde nur 4x ubuntu/bionic64, was Ubuntu 18.04 LTS entspricht.
-#### 3.2 Kennt die Vagrant-Befehle
-- **Vagrant up:** Liest das Vagrantfile und startet die darin enthaltenen VMs
-- **Vagrant snapshot push:** Erstellt ein Snapshot aller VMs (oder wenn definiert nur bestimmte VM)
-- **Vagrant snapshot pull:** Spielt den erstellten Snapshot wieder ein.
-- **Vagrant Provision** führt das Privisioning der VMs durch (nur nötig, wenn 
-  `vagrant up` mit parameter `--no-privision` gemacht wird oder in den Scripts etwas geändert wurde)
-- **Vagrant halt** stoppt die VMs
-- **Vagrant Reload** lädt die Einstellungen aus dem Vagrantfile neu und aktualisiert die VM Hardware
-- **Vagrant ssh** macht eine SSH Verbindung zur angegebenen VM-Maschine
-- **Vagrant Destroy** zerstört die VMs und löscht deren Daten.
-- Weitere Commands sind auf der Webseite von Vagrant zu finden: [Commands](https://www.vagrantup.com/docs/cli)
-#### 3.3 Eingerichtete Umgebung ist dokumentiert
-[Dokumentation](#dokumentation-lb2)<br>
-![Networkplan](/images/K3_Networkplan.jpg)
-#### 3.4 Funktionsweise getestet inkl. Dokumentation der Testfälle
+### 3. K3 
+#### 3.1 Bestehenden Docker-Container kombinieren
+![IMG_DocAsMarkdown](/images/LB3_K3_UsedContainerTemplate.jpg)
+Hier wurde ein bestehender Container mysql:latest verwendet und mit einer Wordpress-Site verknüpft.
+#### 3.2 Bestehende Container als Backend, Desktop-App als Frontend einsetzen
+Ein Wordpress Container und ein Mysql Container werden als Backend verwendet, Google Chrome wird als Frontend verwendet, um die Webseite anzuzeigen.
+#### 3.3 Volumes zur persistenten Datenablage eingerichtet
+![IMG_DocAsMarkdown](/images/LB3_K3_Volumes1.jpg)
+![IMG_DocAsMarkdown](/images/LB3_K3_Volumes2.jpg)
+#### 3.4 Kennt die Docker spezifischen Befehle
+- **docker build** Build an image from a Dockerfile
+- **docker image** Manage images
+- **docker pull** Pull an image or a repository from a registry
+- **docker tag** Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE
+- **docker push** Push an image or a repository to a registry
+- **docker container** Manage containers
+  - **docker container run** Run a command in a new container
+  - **docker container pause** Pause all processes within one or more containers
+  - **docker container stop** Stop one or more running containers
+  - **docker container start** Start one or more stopped containers
+  - **docker container create** Create a new container
+  - **docker container exec** Run a command in a running container
+- **docker network ls** List the networks
+- **docker ps** List containers
+#### 3.5 Eingerichtete Umgebung ist dokumentiert
+[Dokumentation](#dokumentation-lb3)<br>
+![Networkplan](/images/LB3_K3_Networkplan.jpg)
+#### 3.6 Funktionsweise getestet inkl. Dokumentation der Testfälle
 [Testing](#testing)
-#### 3.5 andere, vorgefertigte vm auf eigenem Notebook aufgesetzt
-Zum Testen und verstehen der Vagrant-Funktionen wurden die VMs des [Modul-Repositorys/fwrp](https://github.com/mc-b/M300/tree/master/vagrant/fwrp) verwendet
-#### 3.6 Projekt mit Git und Mark Down dokumentiert
-![IMG_DocAsMarkdown](/images/K3_DokAsMarkdown.jpg)<br>
-[Doku in Git](#3-k3-vagrant)
+#### 3.7 Projekt mit Git und Markdown dokumentiert
+![IMG_DocAsMarkdown](/images/LB3_K3_DokAsMarkdown.jpg)
+[Doku in Git](#3-k3)
 
 ### 4. K4 Sicherheitsaspekte sind implementiert
-#### 4.1 Firewall eingerichtet inkl. Rules
-| Sourc\Destination | Hostsystem | WAN  | Proxy          | DB01     | Web01  | Web02  |
-| :---------------- | :--------- | :--- | :------------- | :------- | :----- | :----- |
-| Hostsystem        | x          | any  | 22/TCP, 80/TCP | 22/TCP   | 22/TCP | 22/TCP |
-| WAN               | -          | x    | 80/TCP         | -        | -      | -      |
-| Proxy             | -          | any  | x              | -        | 80/TCP | 80/TCP |
-| DB01              | -          | any  | -              | x        | -      | -      |
-| Web01             | -          | any  | -              | 3306/TCP | x      | -      |
-| Web02             | -          | any  | -              | 3306/TCP | -      | x      |
-#### 4.2 Reverse-Proxy eingerichtet
-Ja, Siehe [Proxy.sh](Scripts/proxy.sh)
-Der Proxy ist so konfiguriert, dass die Anfragen mittels Round Robin verfahren zu den Webservern weitergeleitet werden.
-#### 4.3 Benutzer- und Rechtevergabe ist eingerichtet
-Die Mysql Datenbank hat einen extra Benutzer `wpuser`, der nur auf die wordpress Datenbank zugreifen kann.
-Dieser User kann nur von den Webservern aus mit einem Passwort verwendet werden.
-Zudem wurde auf den Webservern der Zugriff auf die Website-Dateien beschränkt.
-Dateien hochladen kann nur der Owner des Ordners, sprich Vagrant und die Gruppe Root. Der Rest hat nur Leserechte.
-Die Webseite an sich soll öffentlich zugänglich sein, daher gibt es hier kein Benutzerkonzept.
-#### 4.4 Zugang mit SSH-Tunnel abgesichert
-Nein, da SSH nur vom Hostsystem auf die VMs erlaubt ist.
-Firewall Rules werden im [Default.sh](Scripts/default.sh) so festgelegt.
-#### 4.5 Sicherheitsmassnahmen sind dokumentiert
-- UFW Firewall auf allen Maschinen aktiviert
-- UFW Standardmässig auf Deny gestellt
-- Strikter Firewall-Regelsatz, nur das nötigste wird konfiguriert
-#### 4.6 Projekt mit Git und Mark Down dokumentiert
-![IMG_DocAsMarkdown](/images/K4_DokAsMarkdown.jpg) <br>
+#### 4.1 Service-Überwachung ist eingerichtet
+![IMG_DocAsMarkdown](/images/LB3_K4_monitoring.jpg)
+CAdvisor wurde erfolgreich implementiert und ist über die Firewall mit dem Port 8080 erreichbar. Somit kann auch extern die Auslastung der Hardware und der Container überwacht werden.
+#### 4.2 Aktive Benachrichtigung ist eingerichtet
+Es wurde keine aktive Benachrichtigung eingerichtet, da es sich um ein Testsystem mit Mysql und Wordpress handelt. Ein Testsystem kann mehrmals neu gestartet werden und muss nicht 24/7 online sein.
+#### 4.3 mind. 3 Aspekte der Container-Absicherung sind berücksichtigt
+- Die Container laufen auf einer Virtuellen Maschine mit begrenzten HW-Ressourcen
+- Die VM ist hinter einr OPNsense Firewall, welche die Netze voneinander trennt
+- Die VM ist hinter einr OPNsense Firewall, welche ebenfalls als DDos-Schutz fungiert.
+- Die Wordpress-Instans wird ab dem Ubuntu Image manuell aufgebaut. So wird die Manipulationsmöglichkeit und die Fehleranfälligkeit eingeschränkt
+- SSH Zugriff ist nur vom Host-Netzwerk aus möglich.
+- Beide Container werden mit dedizierten Usern installiert: Mysql mit dem user mysql, Webserver mit dem im docker-compose definierten User (hier Docker)
+- Mysql und Wordpress haben einen Passwort-Schutz integriert, somit kann niemand ohne Passwort zugreifen.
+- Die Daten werden ausserhalb des Containers gespeichert, falls doch etwas passieren würde.
+#### 4.4 Sicherheitsmassnahmen sind dokumentiert
+[Doku in Git](#41-service-überwachung-ist-eingerichtet)
+[Doku in Git](#42-aktive-benachrichtigung-ist-eingerichtet)
+[Doku in Git](#43-mind-3-aspekte-der-container-absicherung-sind-berücksichtigt)
+Port-Matrix Firewall:
+| Sourc\Destination | Hostsystem | WAN  | Firewall                 | Docker Web | Docker Mysql |
+| :---------------- | :--------- | :--- | :----------------------- | :--------- | :----------- |
+| Hostsystem        | x          | any  | 22/TCP, 80/TCP, 8080/TCP | -          | -
+| WAN               | -          | x    | 22/TCP, 80/TCP, 8080/TCP | -          | -
+| Firewall          | -          | any  | x                        | 80/TCP     | -
+| Docker Web        | -          | any  | any                      | x          | 3306/tcp
+| Docker Mysql      | -          | any  | aly                      | -          | x
+#### 4.5 Projekt mit Git und Markdown dokumentiert
+![IMG_DocAsMarkdown](/images/LB3_K4_DokAsMarkdown.jpg) <br>
 [Doku in Git](#4-k4-sicherheitsaspekte-sind-implementiert)
 
-### 5. K5 Zusätzliche Bewertungspunkte
+### 5. K5 Zusätzliche Bewertungspunkte allgemein
 #### 5.1 Allgemein
 ##### 5.1.1 Kreativität
-Wordpress ist das bekannteste und am weitesten verbreitete CMS auf der ganzen Welt. Duzende Webserver werden täglich mit einer neuen Wordpress installation veröffentlicht. Daher bietet sich eine automatische Installation durch so ein Script natürlich sehr an. Mit einer fertigen Umgebung in form von einem Code (IaaC) kann Wordpress nur innert wenigen Minuten betriebsbereit gemacht werden. Der einzige Weg, das noch schneller zu machen und gleichzeitig Ressourcen zu sparen wäre eine Umgebung auf Docker basierend, dies wird aber vermutlich erst in LB3 zum Zug kommen.
+Wordpress ist das bekannteste und am weitesten verbreitete CMS auf der ganzen Welt. Duzende Webserver werden täglich mit einer neuen Wordpress installation veröffentlicht. Daher bietet sich eine automatische Installation durch so ein Script natürlich sehr an. Mit einer fertigen Umgebung in form von einem Code (IaaC) kann Wordpress nur innert wenigen Minuten betriebsbereit gemacht werden. Zudem ist die Umgebung mittels Docker innert Sekunden aufgebuat und kann beliebig reproduziert werden.
 ##### 5.1.2 Komplexität
-Das Vagrantfile und die Scripts sind sehr mager aufgebaut. Nur die nötigsten Installationen werden getätigt, nur die wichtigsten Konfigurationsschritte werden durchgeführt. Das Vagrantfile ist so aufgebaut, dass beliebig viele Virtuelle Maschinen als Webserver durch Copy und Paste hinzugefügt werden können. Es sind nur leichte Änderungen wie IP-Adresse und Name nötig, danach sind die Maschinen innert wenigen Minuten bereits mit Wordpress installiert und erreichbar.
+Wordpress wurde mittels wp-cli installiert. wp-cli ist das am weitesten verbreitete Tool, um eine Webseite über das CLI verwalten zu können. Dies ist besonders in Docker sehr wichtig, da die Container alle auf CLI beruhen und es keine grafische Oberfläche hat. Zudem kann so auch von weitem aus mittels ssh zugegriffen werden und wp-admin kann so beihnahe ausgeschaltet werden, was im Allgemienen eine Sicherheitslücke in Wordpress darstellt
 ##### 5.1.3 Umfang
-Trotz relativ wenig Scriptzeilen wird wärend der Installation viel gemacht. Die Scripts sind so komplex zusammengeschrieben und aufeinander aufgebaut, dass es nach wenig aussieht, jedoch eine ganze Wordpress installation über das CLI durchgeführt wird. Es wurde darauf geachtet, dass Commands, welche auf mehreren VMs ausgeführt werden müssen, in einem Script platz finden, um Platz zu sparen. Wer selber schon einmal Wordpress installiert hat, sei es Grafisch oder ebenfalls via cli, der weiss wie lange so ein Prozess dauert.
+Durch den Aufbau von Kuberntes mit einem Master und 4 Slaves sehe ich den Umfang als recht gross, auch wenn diese schlussendlich leider nicht zum Einsatz kommen konnten. Zudem wurde auf Kubernetes noch das Dashboard integriert, damit eine grafische Überwachung stattfinden kann. Zudem wurde eine Router-VM davor geschaltet, damit die Sicherheit noch höher angesetzt werden kann.
 #### 5.2 Umsetung
-##### 5.2.1 Cloud-Integration
-Es wurde kein IaaS Verwendet
-##### 5.2.2 Authentifizierung und Autorisierung via LDAP
-Es wurde kein LDAP eingerichtet
-##### 5.2.3 Übungsdokumentation als Vorlage für Modul-Unterlagen erstellt
+##### 5.2.1 Übungsdokumentation als Vorlage für Modul-Unterlagen erstellt
 Die Installation und das Script wurde so geschrieben, dass jeder dies Nachbauen kann.
 Zudem sind noch einige Punkte für Troubleshooting integriert, wenn die Installation und das Aufstarten der VMs zu Problemen führt.
 #### 5.3 Persönliche Lernentwicklung
@@ -187,3 +176,18 @@ Zudem sind noch einige Punkte für Troubleshooting integriert, wenn die Installa
 [Wissenszuwachs](#2-lernschritte-im-verlauf-der-lb)
 ##### 5.3.2 Reflexion
 [Reflexion](#3-reflexion)
+
+
+### 6. K6 Zusätzliche systemtechnische Bewertungspunkte
+#### 6.1 Umfangreiche Vernetzung der Container-Infrastruktur
+![Networkplan](/images/LB3_K3_Networkplan.jpg)
+#### 6.2 Image-Bereitstellung
+Damit das Image immer auf dem aktuellen Stand ist, wird der Webserver immer neu erstellt. bei der Image-Bereitstellung kann es gut vorkommen, dass es Image zu alt ist. Daher wird auf eine fertige Bereitstellung verzichtet.
+Das Script und alle Unterlagen sind jedoch auf Github unter [LB3 --> Docker](/LB3/Docker) einsehbar.
+#### 6.3 Continuous Integration
+Continuous Intergration wurde nicht eingeführt, da die Umgebung mit Wordpress und der Datenbank nur Testsysteme sind, die schnell auzfusetzen sein müssen. Für Produktivsysteme und Hochverfügbarkeit wäre eine Continuous Intergration jedoch zu empfehlen.
+#### 6.4 Cloud-Integration
+Es wurde kein IaaS Verwendet
+#### 6.5 Elemente aus Kubernetesübung sind umgesetzt und dokumentiert
+Kubernetes wurde installiert auf einem Mastersystem und 4 Slaves. Zudem wurde noch Kubernetes GUI installiert, damit Kubernetes über die graphische Oberfläche gesteuert werden kann.
+![IMG_KubernetesGUI](/images/LB3_K6_Kubernetes.jpg)
