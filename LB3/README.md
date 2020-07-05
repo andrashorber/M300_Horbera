@@ -143,9 +143,9 @@ Es wurde keine aktive Benachrichtigung eingerichtet, da es sich um ein Testsyste
 - Mysql und Wordpress haben einen Passwort-Schutz integriert, somit kann niemand ohne Passwort zugreifen.
 - Die Daten werden ausserhalb des Containers gespeichert, falls doch etwas passieren würde.
 #### 4.4 Sicherheitsmassnahmen sind dokumentiert
-[Doku in Git](#41-service-überwachung-ist-eingerichtet)
-[Doku in Git](#42-aktive-benachrichtigung-ist-eingerichtet)
-[Doku in Git](#43-mind-3-aspekte-der-container-absicherung-sind-berücksichtigt)
+[Doku in Git 4.1](#41-service-überwachung-ist-eingerichtet) <br>
+[Doku in Git 4.2](#42-aktive-benachrichtigung-ist-eingerichtet) <br>
+[Doku in Git 4.3](#43-mind-3-aspekte-der-container-absicherung-sind-berücksichtigt) <br>
 Port-Matrix Firewall:
 | Sourc\Destination | Hostsystem | WAN  | Firewall                 | Docker Web | Docker Mysql |
 | :---------------- | :--------- | :--- | :----------------------- | :--------- | :----------- |
