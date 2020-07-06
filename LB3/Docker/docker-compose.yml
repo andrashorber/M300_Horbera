@@ -44,7 +44,7 @@ services:
         WP_ADMIN_PASSWORD: P4ssw0rd!
         WP_ADMIN_EMAIL: admin@no-mail.local
     ports:
-      - 8082:80
+      - 8080:80
     environment: 
       TZ: Europe/Zurich
     links: 
@@ -61,7 +61,7 @@ services:
     image: gcr.io/google-containers/cadvisor:latest
     container_name: cadvisor
     ports:
-      - 80:80
+      - 8081:8080
     volumes:
     - /:/rootfs:ro
     - /var/run:/var/run:rw
@@ -74,7 +74,7 @@ services:
     image: wordpress
     restart: always
     ports:
-      - 8081:80
+      - 8080:80
     environment:
       WORDPRESS_DB_HOST: "192.168.123.20"
       WORDPRESS_DB_USER: m300_wpuser
