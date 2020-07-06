@@ -42,13 +42,15 @@ RUN chmod 761 wp-cli.phar
 RUN mv wp-cli.phar /usr/local/bin/wp
 
 #removing Apache default Page
-RUN rm /var/www/html/index.html
+#RUN rm /var/www/html/index.html
 
 #Preparing Wordpress site location
 RUN mkdir $INSTALLDIR
-RUN mkdir $INSTALLDIR/wp-content
+RUN chmod 777 $INSTALLDIR
+RUN mkdir "$INSTALLDIR/wp-content"
+RUN chmod 777 "$INSTALLDIR/wp-content"
 RUN chown -R $INSTALLUSER $INSTALLDIR
-RUN chown -R $INSTALLUSER $INSTALLDIR/wp-content
+RUN chown -R $INSTALLUSER "$INSTALLDIR/wp-content"
 WORKDIR $INSTALLDIR
 USER $INSTALLUSER
 
@@ -64,7 +66,8 @@ RUN wp core install --url=$WP_ULR --title=$WP_SITENAME --admin_user=$WP_ADMIN_US
 
 #Configuring Default Wordpress site
 USER root
-RUN sed -i 's!/var/www/html!$INSTALLDIR!' /etc/apache2/sites-available/000-default.conf
+#RUN sed -i 's!/var/www/html!$INSTALLDIR!' /etc/apache2/sites-available/000-default.conf
+#RUN sed -i 's!/var/www/html!$INSTALLDIR!' /etc/apache2/sites-enabled/000-default.conf
 USER $INSTALLUSER
 
 #Updateing Wordpress Plugin and Theme

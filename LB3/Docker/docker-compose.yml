@@ -32,7 +32,7 @@ services:
       dockerfile: Dockerfile_Web
       args: 
         INSTALLUSER: Docker
-        INSTALLDIR: /var/www/html/M300
+        INSTALLDIR: /var/www/html/M300/
         MYSQL_HOST: "192.168.123.20"
         MYSQL_DATABASE: m300_wordpress
         MYSQL_USER: m300_wpuser
@@ -43,6 +43,8 @@ services:
         WP_ADMIN_USER: m300admin
         WP_ADMIN_PASSWORD: P4ssw0rd!
         WP_ADMIN_EMAIL: admin@no-mail.local
+    ports:
+      - 8082:80
     environment: 
       TZ: Europe/Zurich
     links: 
@@ -54,18 +56,36 @@ services:
         target: /var/www/html/M300
     expose:
       - "80"
-    ports:
-      - "80:80"
     
   cadvisor:
-    depends_on:
-      - web01
     image: gcr.io/google-containers/cadvisor:latest
     container_name: cadvisor
     ports:
-      - 8080:8080
+      - 80:80
     volumes:
     - /:/rootfs:ro
     - /var/run:/var/run:rw
     - /sys:/sys:ro
     - /var/lib/docker/:/var/lib/docker:ro
+
+  test:
+    image: httpd
+    ports:
+     - 8081:80
+
+  wordpress:
+    depends_on: 
+      - db01
+    image: wordpress
+    restart: always
+    ports:
+      - 8082:80
+    environment:
+      WORDPRESS_DB_HOST: "192.168.123.20"
+      WORDPRESS_DB_USER: m300_wpuser
+      WORDPRESS_DB_PASSWORD: m300_P4ssw0rd!
+      WORDPRESS_DB_NAME: m300_wordpress
+    volumes:
+      - type: bind
+        source: /Docker/web
+        target: /var/www/html/M300
