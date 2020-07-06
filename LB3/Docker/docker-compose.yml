@@ -68,18 +68,13 @@ services:
     - /sys:/sys:ro
     - /var/lib/docker/:/var/lib/docker:ro
 
-  test:
-    image: httpd
-    ports:
-     - 8081:80
-
   wordpress:
     depends_on: 
       - db01
     image: wordpress
     restart: always
     ports:
-      - 8082:80
+      - 8081:80
     environment:
       WORDPRESS_DB_HOST: "192.168.123.20"
       WORDPRESS_DB_USER: m300_wpuser
@@ -88,4 +83,4 @@ services:
     volumes:
       - type: bind
         source: /Docker/web
-        target: /var/www/html/M300
+        target: /var/www/html
