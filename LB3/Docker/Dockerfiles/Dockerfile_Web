@@ -73,4 +73,3 @@ RUN wp theme update --all
 
 #Expose Port 80
 EXPOSE 80
-

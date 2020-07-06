@@ -24,7 +24,6 @@ services:
     ports: 
       - 3306:3306
 
-
   web01:
     depends_on: 
       - db01
@@ -44,16 +43,29 @@ services:
         WP_ADMIN_USER: m300admin
         WP_ADMIN_PASSWORD: P4ssw0rd!
         WP_ADMIN_EMAIL: admin@no-mail.local
+    environment: 
+      TZ: Europe/Zurich
     links: 
       - db01:db01
     container_name: "web01"
     volumes:
       - type: bind
         source: /Docker/web
-        target: /var/www/html/
-    expose: 
+        target: /var/www/html/M300
+    expose:
       - "80"
     ports:
-      - 0.0.0.0:80:80
-    environment: 
-      TZ: Europe/Zurich
+      - "80:80"
+    
+  cadvisor:
+    depends_on:
+      - web01
+    image: gcr.io/google-containers/cadvisor:latest
+    container_name: cadvisor
+    ports:
+      - 8080:8080
+    volumes:
+    - /:/rootfs:ro
+    - /var/run:/var/run:rw
+    - /sys:/sys:ro
+    - /var/lib/docker/:/var/lib/docker:ro

@@ -132,7 +132,8 @@ Ein Wordpress Container und ein Mysql Container werden als Backend verwendet, Go
 ![IMG_DocAsMarkdown](/images/LB3_K4_monitoring.jpg)
 CAdvisor wurde erfolgreich implementiert und ist über die Firewall mit dem Port 8080 erreichbar. Somit kann auch extern die Auslastung der Hardware und der Container überwacht werden.
 #### 4.2 Aktive Benachrichtigung ist eingerichtet
-Es wurde keine aktive Benachrichtigung eingerichtet, da es sich um ein Testsystem mit Mysql und Wordpress handelt. Ein Testsystem kann mehrmals neu gestartet werden und muss nicht 24/7 online sein.
+Es Wurde eine Mail-Benachrichtigung eingerichtet, die bei einem stoppen des Docker Dienstes oder der Unerreichbarkeit eines der definierten Containern alle 5 Minuten ein Mail versendet. Konfiguriert wurde temporär die Mail-Adresse `andispam@gmx.ch` gesendet. Der Task wird von Crontab ausgeführt.
+![IMG_MailNotifications](/images/LB3_K4_MailNotification.jpg)
 #### 4.3 mind. 3 Aspekte der Container-Absicherung sind berücksichtigt
 - Die Container laufen auf einer Virtuellen Maschine mit begrenzten HW-Ressourcen
 - Die VM ist hinter einr OPNsense Firewall, welche die Netze voneinander trennt
@@ -185,7 +186,7 @@ Zudem sind noch einige Punkte für Troubleshooting integriert, wenn die Installa
 Damit das Image immer auf dem aktuellen Stand ist, wird der Webserver immer neu erstellt. bei der Image-Bereitstellung kann es gut vorkommen, dass es Image zu alt ist. Daher wird auf eine fertige Bereitstellung verzichtet.
 Das Script und alle Unterlagen sind jedoch auf Github unter [LB3 --> Docker](/LB3/Docker) einsehbar.
 #### 6.3 Continuous Integration
-Continuous Intergration wurde nicht eingeführt, da die Umgebung mit Wordpress und der Datenbank nur Testsysteme sind, die schnell auzfusetzen sein müssen. Für Produktivsysteme und Hochverfügbarkeit wäre eine Continuous Intergration jedoch zu empfehlen.
+Continuous Intergration wurde nicht eingeführt, da die Umgebung mit Wordpress und der Datenbank nur Testsysteme sind, die schnell aufzusetzen sein müssen. Für Produktivsysteme und Hochverfügbarkeit wäre eine Continuous Intergration jedoch zu empfehlen.
 #### 6.4 Cloud-Integration
 Es wurde kein IaaS Verwendet
 #### 6.5 Elemente aus Kubernetesübung sind umgesetzt und dokumentiert
